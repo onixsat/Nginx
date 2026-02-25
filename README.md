@@ -1,6 +1,6 @@
 # Nginx
 
-  
+
 sudo systemctl restart ssh
 sudo systemctl start sshd
 sudo systemctl enable sshd
