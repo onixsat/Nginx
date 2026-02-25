@@ -13,10 +13,11 @@ sudo apt install ufw -y
 sudo apt install net-tools
 sudo apt-get install nginx -y
 sudo apt-get install php8.1-fpm -y
-sudo apt install openssh-server 1-mcrypt
 sudo add-apt-repository ppa:ondrej/php
 sudo apt-get install php8.1-mcrypt
+sudo apt install openssh-server mcrypt
 sudo apt-get install dos2unix
+find -name '*.sh' -print0 | xargs -0 dos2unix
 
 sudo apt install certbot python3-certbot-nginx -y
 sudo certbot --nginx -d vps-3026dd85.vps.ovh.net -m explodgf@gmail.com --agree-tos --no-eff
@@ -30,7 +31,15 @@ sudo chmod -R 777 /var/www/html/
 bash -c "$(curl -L https://cloud.nginxui.com/install.sh)" @ install
 
 
-find -name '*.sh' -print0 | xargs -0 dos2unix
+
+git clone https://github.com/onixsat/Nginx.git
+cd Nginx/
+mv www/stream/ /var/www/
+cp sites-available/* /etc/nginx/sites-available/
+cp sites-enabled/* /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+
+
 
 sudo systemctl start nginx-ui
 sudo systemctl status nginx-ui
