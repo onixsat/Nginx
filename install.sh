@@ -23,7 +23,7 @@ cleanup() {
     if [ $exit_code -ne 0 ]; then
         log_error "Script failed with exit code $exit_code at line $LINENO"
     fi
-    exit $exit_code
+    echo $exit_code
 }
 
 trap cleanup ERR
