@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 #set -euo pipefail
 set -e
-sudo su
+#sudo su
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
