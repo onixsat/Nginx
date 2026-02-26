@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 #set -euo pipefail
 set -e
-
+sudo su
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -30,7 +30,7 @@ cleanup() {
         log_error "Script failed with exit code $exit_code at line $LINENO"
     fi
     echo $exit_code
-    sleep 5
+    #sleep 5
 }
 
 trap cleanup ERR
@@ -38,18 +38,19 @@ trap cleanup ERR
 # Check if running as root or with sudo
 if [ "$EUID" -ne 0 ]; then 
     log_error "Please run as root or with sudo"
-    exit 1
+  #  exit 1
 fi
 
 log_info "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 
 # For directory
 if [ -d "Nginx" ]; then
-  sudo rm -R Nginx
+  sudo rm -r Nginx
 fi
-
+rm -r Nginx
 
 sudo git clone https://github.com/onixsat/Nginx.git
+
 cd Nginx
 
 # Create web directories
@@ -84,7 +85,7 @@ chmod -R 777 /var/www/html
 
 # Remove default site if custom one exists
 if [ -f "/etc/nginx/sites-available/default" ] && [ -f "/etc/nginx/sites-available/nginx-ui.conf" ]; then
-    rm -f /etc/nginx/sites-enabled/default
+#    rm -f /etc/nginx/sites-enabled/default
     log_info "Removed default Nginx site"
 fi
 
@@ -112,14 +113,14 @@ fi
 
 # Configure SSH
 log_info "Configuring SSH..."
-systemctl restart ssh
-systemctl enable ssh
+#systemctl restart ssh
+#systemctl enable ssh
 
 # Ensure sshd service is handled correctly (some systems use ssh, some use sshd)
-if systemctl list-unit-files | grep -q "^sshd.service"; then
-    systemctl start sshd
-    systemctl enable sshd
-fi
+#if systemctl list-unit-files | grep -q "^sshd.service"; then
+#    systemctl start sshd
+ #   systemctl enable sshd
+#fi
 
 # Final status check
 log_info "Performing final status checks..."
@@ -142,5 +143,5 @@ echo "  sudo nano /etc/nginx/sites-available/default"
 echo "  sudo nano /etc/nginx/sites-available/nginx-ui.conf"
 echo ""
 log_info "VPS setup completed successfully!"
-sleep 5
+#sleep 5
 #exit 0
