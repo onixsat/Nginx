@@ -12,6 +12,7 @@
   Ao iniciar vai comfigurar todo o nhinx.
   <br>
   oi
+  
   _Nota: seguro._
 ```bash
 sudo nginx -t
