@@ -78,8 +78,9 @@ sudo iptables -I INPUT 1 -p tcp --dport 8443 -j ACCEPT
 
 # Obtain SSL certificate
 log_info "Obtaining SSL certificate for vps-3026dd85.vps.ovh.net..."
-if ! certbot certificates | grep -q "vps-3026dd85.vps.ovh.net"; then
-    certbot --nginx -d onixsat.online explodgf@gmail.com --agree-tos --no-eff-email --non-interactive
+if ! certbot certificates | grep -q "ospro.pt"; then
+  #  certbot --nginx -d onixsat.online explodgf@gmail.com --agree-tos --no-eff-email --non-interactive
+    sudo certbot --nginx -d ospro.pt
 else
     log_warn "Certificate already exists, skipping..."
 fi
