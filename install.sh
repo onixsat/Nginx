@@ -123,15 +123,15 @@ else
 fi
 
 # Configure SSH
-log_info "Configuring SSH..."
-systemctl restart ssh
-systemctl enable ssh
+#log_info "Configuring SSH..."
+#systemctl restart ssh
+#systemctl enable ssh
 
 # Ensure sshd service is handled correctly (some systems use ssh, some use sshd)
-if systemctl list-unit-files | grep -q "^sshd.service"; then
-    systemctl start sshd
-    systemctl enable sshd
-fi
+#if systemctl list-unit-files | grep -q "^sshd.service"; then
+#    systemctl start sshd
+#    systemctl enable sshd
+#fi
 
 # Final status check
 log_info "Performing final status checks..."
