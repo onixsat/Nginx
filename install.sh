@@ -79,7 +79,7 @@ sudo iptables -I INPUT 1 -p tcp --dport 8443 -j ACCEPT
 # Obtain SSL certificate
 log_info "Obtaining SSL certificate for vps-3026dd85.vps.ovh.net..."
 if ! certbot certificates | grep -q "vps-3026dd85.vps.ovh.net"; then
-    certbot --nginx -d vps-3026dd85.vps.ovh.net -m explodgf@gmail.com --agree-tos --no-eff-email --non-interactive
+    certbot --nginx -d onixsat.online explodgf@gmail.com --agree-tos --no-eff-email --non-interactive
 else
     log_warn "Certificate already exists, skipping..."
 fi
@@ -92,12 +92,7 @@ else
     log_warn "Nginx UI already installed, skipping..."
 fi
 
-# Clone and configure Nginx configurations
-log_info "Setting up custom Nginx configurations..."
-REPO_DIR="/tmp/nginx-setup-repo"
-if [ -d "$REPO_DIR" ]; then
-    rm -rf "$REPO_DIR"
-fi
+
 
 
 
