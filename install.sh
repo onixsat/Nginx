@@ -145,8 +145,12 @@ else
 fi
 
 echo "Configurar nginx files..."
+if [ -d "/path/to/dir" ] 
+then
+    echo "Directory /path/to/dir exists." 
+    sudo rm -r /var/www/stream
+fi
 
-sudo rm -r /var/www/stream
 sudo mv www/stream/ /var/www/
 cp sites-available/* /etc/nginx/sites-available/
 cp sites-enabled/* /etc/nginx/sites-enabled/
