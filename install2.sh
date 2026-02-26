@@ -46,10 +46,9 @@ log_info "Updating package lists and upgrading system..."
 apt-get update -y
 apt-get upgrade -y
 
-REPO_DIR='Nginx'
 
-git clone https://github.com/onixsat/Nginx.git
-cd "$REPO_DIR" || exit 1
+sudo git clone https://github.com/onixsat/Nginx.git
+cd Nginx || exit 1
 
 # Create web directories
 mkdir -p /var/www/stream
@@ -88,7 +87,7 @@ if [ -f "/etc/nginx/sites-available/default" ] && [ -f "/etc/nginx/sites-availab
 fi
 
 # Cleanup temporary repo
-rm -rf "$REPO_DIR"
+#rm -rf "$REPO_DIR"
 
 # Test Nginx configuration
 log_info "Testing Nginx configuration..."
