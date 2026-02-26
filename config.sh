@@ -44,20 +44,18 @@ fi
 log_info "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 
 # For directory
-if [ -d "Nginx" ]; then
-  rm -r Nginx
-fi
+#if [ -d "Nginx" ]; then
+#  rm -r Nginx
+#fi
 
-sudo git clone https://github.com/onixsat/Nginx.git
-cd Nginx
+#sudo git clone https://github.com/onixsat/Nginx.git
+#cd Nginx
 
-# Create web directories
-mkdir -p /var/www/stream
-mkdir -p /var/www/html
+
 
 # Move stream content if it exists
-if [ -d "www/stream" ]; then
-    cp -r www/stream/* /var/www/stream/
+if [ -d "/var/www/stream" ]; then
+    sudo mv www/stream/ /var/www/
     log_info "Stream content copied to /var/www/stream/"
 else
     log_warn "www/stream directory not found in repo"
@@ -78,8 +76,8 @@ fi
 log_info "Setting secure permissions..."
 chown -R www-data:www-data /var/www/stream
 chown -R www-data:www-data /var/www/html
-chmod -R 777 /var/www/stream
-chmod -R 777 /var/www/html
+chmod -R 777 /var/www/stream/*
+chmod -R 777 /var/www/html/*
 
 # Remove default site if custom one exists
 #if [ -f "/etc/nginx/sites-available/default" ] && [ -f "/etc/nginx/sites-available/nginx-ui.conf" ]; then
@@ -110,7 +108,7 @@ else
 fi
 
 # Configure SSH
-log_info "Configuring SSH..."
+#log_info "Configuring SSH..."
 #systemctl restart ssh
 #systemctl enable ssh
 
@@ -143,3 +141,25 @@ echo ""
 log_info "VPS setup completed successfully!"
 #sleep 5
 exit 0
+
+
+
+
+
+
+
+
+
+sudo systemctl restart nginx
+
+sudo systemctl start nginx-ui
+sudo systemctl status nginx-ui
+
+sudo systemctl restart ssh
+sudo systemctl start sshd
+sudo systemctl enable sshd
+sudo nginx -t
+sudo systemctl restart nginx
+
+sudo nano /etc/nginx/sites-available/default
+sudo nano /etc/nginx/sites-available/nginx-ui.conf
