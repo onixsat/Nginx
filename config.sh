@@ -4,6 +4,7 @@ set -euo pipefail
 #set -e
 echo "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 
+sudo rm -r /var/www/stream
 sudo mv www/stream/ /var/www/
 cp sites-available/* /etc/nginx/sites-available/
 cp sites-enabled/* /etc/nginx/sites-enabled/
@@ -24,33 +25,7 @@ systemctl restart nginx
 systemctl restart php8.1-fpm
 
 # Start and enable Nginx UI
-ystemctl start nginx-ui
+systemctl start nginx-ui
 systemctl enable nginx-ui
  #   systemctl restart nginx-ui
-    
 
-# Configure SSH
-#log_info "Configuring SSH..."
-#systemctl restart ssh
-#systemctl enable ssh
-
-# Ensure sshd service is handled correctly (some systems use ssh, some use sshd)
-#if systemctl list-unit-files | grep -q "^sshd.service"; then
-#    systemctl start sshd
- #   systemctl enable sshd
-#fi
-
-# Final status check
-
-
-
-
-
-
-
-
-
-sudo systemctl restart nginx
-
-sudo systemctl start nginx-ui
-sudo systemctl status nginx-ui
