@@ -46,9 +46,9 @@ log_info "Updating package lists and upgrading system..."
 apt-get update -y
 apt-get upgrade -y
 
+REPO_DIR='Nginx'
 
-
-git clone https://github.com/onixsat/Nginx.git "$REPO_DIR"
+git clone https://github.com/onixsat/Nginx.git
 cd "$REPO_DIR" || exit 1
 
 # Create web directories
