@@ -42,6 +42,10 @@ fi
 log_info "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 
 # Update system packages
+# For directory
+if [ -d "Nginx" ]; then
+  rm -r Nginx
+fi
 
 
 sudo git clone https://github.com/onixsat/Nginx.git
