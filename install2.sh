@@ -1,8 +1,9 @@
-#!/bin/bash
+,#!/bin/bash
 
 # Exit immediately if a command exits with a non-zero status
 #set -euo pipefail
 set -e
+sudo su
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -28,7 +29,7 @@ cleanup() {
     if [ $exit_code -ne 0 ]; then
         log_error "Script failed with exit code $exit_code at line $LINENO"
     fi
-    exit $exit_code
+    echo $exit_code
 }
 
 trap cleanup ERR
@@ -44,7 +45,7 @@ log_info "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 # Update system packages
 # For directory
 if [ -d "Nginx" ]; then
-  rm -r Nginx
+  sudo rm -R Nginx
 fi
 
 
@@ -78,8 +79,8 @@ fi
 log_info "Setting secure permissions..."
 chown -R www-data:www-data /var/www/stream
 chown -R www-data:www-data /var/www/html
-chmod -R 755 /var/www/stream
-chmod -R 755 /var/www/html
+chmod -R 777 /var/www/stream
+chmod -R 777 /var/www/html
 
 # Remove default site if custom one exists
 if [ -f "/etc/nginx/sites-available/default" ] && [ -f "/etc/nginx/sites-available/nginx-ui.conf" ]; then
@@ -141,4 +142,4 @@ echo "  sudo nano /etc/nginx/sites-available/nginx-ui.conf"
 echo ""
 log_info "VPS setup completed successfully!"
 
-exit 0
+#exit 0
