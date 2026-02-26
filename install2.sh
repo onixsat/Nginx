@@ -4,6 +4,8 @@
 #set -euo pipefail
 set -e
 sudo su
+cd /home/ubuntu
+
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -30,6 +32,7 @@ cleanup() {
         log_error "Script failed with exit code $exit_code at line $LINENO"
     fi
     echo $exit_code
+    sleep 5
 }
 
 trap cleanup ERR
@@ -42,7 +45,6 @@ fi
 
 log_info "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 
-# Update system packages
 # For directory
 if [ -d "Nginx" ]; then
   sudo rm -R Nginx
@@ -104,6 +106,7 @@ systemctl restart php8.1-fpm
 if systemctl list-unit-files | grep -q nginx-ui; then
     systemctl start nginx-ui
     systemctl enable nginx-ui
+    systemctl restart nginx-ui
     log_info "Nginx UI started and enabled"
 else
     log_warn "nginx-ui service not found"
@@ -141,5 +144,5 @@ echo "  sudo nano /etc/nginx/sites-available/default"
 echo "  sudo nano /etc/nginx/sites-available/nginx-ui.conf"
 echo ""
 log_info "VPS setup completed successfully!"
-
+sleep 5
 #exit 0
