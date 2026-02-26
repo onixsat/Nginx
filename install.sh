@@ -1,15 +1,10 @@
 #!/bin/bash
-
-# Exit immediately if a command exits with a non-zero status
 set -euo pipefail
-
-# Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Logging functions
 log_info() {
     echo -e "${GREEN}[INFO]${NC} $1"
 }
@@ -66,6 +61,8 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     git \
     curl
 
+sudo apt-get install iptables-persistent
+
 # Note: mcrypt is deprecated in PHP 8.1. If you need encryption, consider sodium or openssl
 log_warn "mcrypt is deprecated in PHP 8.1+. Consider using php8.1-sodium instead."
 
@@ -74,6 +71,10 @@ log_info "Configuring UFW..."
 ufw allow 'Nginx Full'
 ufw allow OpenSSH
 ufw --force enable
+
+log_info "Configuring iptables..."
+sudo iptables -I INPUT 1 -p tcp --dport 8080 -j ACCEPT
+sudo iptables -I INPUT 1 -p tcp --dport 8443 -j ACCEPT
 
 # Obtain SSL certificate
 log_info "Obtaining SSL certificate for vps-3026dd85.vps.ovh.net..."
@@ -105,9 +106,7 @@ fi
 
 
 
-# Test Nginx configuration
-log_info "Testing Nginx configuration..."
-nginx -t
+
 
 # Restart services
 log_info "Restarting services..."
@@ -144,5 +143,32 @@ if systemctl is-active --quiet nginx-ui 2>/dev/null; then
 else
     log_warn "Nginx UI status check failed"
 fi
+
+echo "Configurar nginx files..."
+
+sudo rm -r /var/www/stream
+sudo mv www/stream/ /var/www/
+cp sites-available/* /etc/nginx/sites-available/
+cp sites-enabled/* /etc/nginx/sites-enabled/
+
+echo "Setting secure permissions..."
+chown -R www-data:www-data /var/www/stream
+chown -R www-data:www-data /var/www/html
+chmod -R 777 /var/www/stream/*
+chmod -R 777 /var/www/html/*
+
+
+echo "Testing Nginx configuration..."
+nginx -t
+
+# Restart services
+echo "Restarting services..."
+sudo systemctl restart nginx
+sudo systemctl restart php8.1-fpm
+
+# Start and enable Nginx UI
+sudo systemctl start nginx-ui
+sudo systemctl enable nginx-ui
+#systemctl restart nginx-ui
 
 echo "OK"
