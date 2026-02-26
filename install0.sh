@@ -3,7 +3,7 @@
 # Exit immediately if a command exits with a non-zero status
 #set -euo pipefail
 set -e
-#sudo su
+sudo su
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -38,19 +38,17 @@ trap cleanup ERR
 # Check if running as root or with sudo
 if [ "$EUID" -ne 0 ]; then 
     log_error "Please run as root or with sudo"
-  #  exit 1
+    exit 1
 fi
 
 log_info "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 
 # For directory
 if [ -d "Nginx" ]; then
-  sudo rm -r Nginx
+  rm -r Nginx
 fi
-rm -r Nginx
 
 sudo git clone https://github.com/onixsat/Nginx.git
-
 cd Nginx
 
 # Create web directories
@@ -84,10 +82,10 @@ chmod -R 777 /var/www/stream
 chmod -R 777 /var/www/html
 
 # Remove default site if custom one exists
-if [ -f "/etc/nginx/sites-available/default" ] && [ -f "/etc/nginx/sites-available/nginx-ui.conf" ]; then
+#if [ -f "/etc/nginx/sites-available/default" ] && [ -f "/etc/nginx/sites-available/nginx-ui.conf" ]; then
 #    rm -f /etc/nginx/sites-enabled/default
-    log_info "Removed default Nginx site"
-fi
+#    log_info "Removed default Nginx site"
+#fi
 
 # Cleanup temporary repo
 #rm -rf "$REPO_DIR"
@@ -105,7 +103,7 @@ systemctl restart php8.1-fpm
 if systemctl list-unit-files | grep -q nginx-ui; then
     systemctl start nginx-ui
     systemctl enable nginx-ui
-    systemctl restart nginx-ui
+ #   systemctl restart nginx-ui
     log_info "Nginx UI started and enabled"
 else
     log_warn "nginx-ui service not found"
@@ -144,4 +142,4 @@ echo "  sudo nano /etc/nginx/sites-available/nginx-ui.conf"
 echo ""
 log_info "VPS setup completed successfully!"
 #sleep 5
-#exit 0
+exit 0
