@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Exit immediately if a command exits with a non-zero status
-set -euo pipefail
-
+#set -euo pipefail
+set -e
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -42,13 +42,10 @@ fi
 log_info "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 
 # Update system packages
-log_info "Updating package lists and upgrading system..."
-apt-get update -y
-apt-get upgrade -y
 
 
 sudo git clone https://github.com/onixsat/Nginx.git
-cd Nginx || exit 1
+cd Nginx
 
 # Create web directories
 mkdir -p /var/www/stream
