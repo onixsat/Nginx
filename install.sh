@@ -36,6 +36,25 @@ fi
 
 log_info "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 
+# Set $chostname to current hostname 
+chostname=$(cat /etc/hostname)
+
+# Display current hostname
+echo "Current hostname is '$chostname'"
+
+# Set $newhostname as new hostname 
+echo "Enter new hostname: "
+read newhostname
+
+# Change the hostname value in /etc/hostname and /etc/hosts files
+sudo sed -i "s/$chostname/$newhostname/g" /etc/hostname
+sudo sed -i "s/$chostname/$newhostname/g" /etc/hosts
+
+# Display new hostname
+echo "Your new hostname is $newhostname"
+
+# Reboot the system
+read -s -n 1 -p "Press any key to reboot!"
 # Update system packages
 log_info "Updating package lists and upgrading system..."
 apt-get update -y
