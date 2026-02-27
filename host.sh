@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Setting variables to run
-DOMAIN="ospro.pt"
+DOMAIN="host.ospro.pt"
 CLOUDFLAREEMAIL="onixsat6@gmail.com"
 CLOUDFLAREAPIKEY="a254903d0de5754b285184bb2e4cbb65"
 
