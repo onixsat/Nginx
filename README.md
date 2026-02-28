@@ -13,7 +13,7 @@ bash install.sh
 <sm style="font-style:italic;">
   Ao iniciar vai comfigurar todo o nhinx.
   <br>
-  oi
+ <sm style="font-size:7;">N+tsa3Ed8nfcTwYWJSp3LkHs1qZ/ACWC38CZuA4Q24o=:p0K5BOXQP4joK7aWUj+zPQ==</sm>
   
   _Nota: seguro._
 ```bash
