@@ -1,5 +1,11 @@
 #!/bin/bash
-set -euo pipefail
+set -eu #set -euo pipefail
+TIMEZONE=Africa/Lagos
+export LC_ALL=en_US.UTF-8
+add-apt-repository --yes universe
+timedatectl set-timezone ${TIMEZONE} 
+apt --yes install locales-all
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -35,6 +41,21 @@ fi
 
 log_info "Starting VPS setup for vps-3026dd85.vps.ovh.net..."
 
+
+
+
+echo "Criar novo sudo user ospro..."
+USERNAME=ospro
+# Add the new user (and give them sudo privileges).
+useradd --create-home --shell "/bin/bash" --groups sudo "${USERNAME}"
+# Force a password to be set for the new user the first time they log in.
+passwd --delete "${USERNAME}" 
+chage --lastday 0 "${USERNAME}"
+# Copy the SSH keys from the root user to the new user.
+rsync --archive --chown=${USERNAME}:${USERNAME} /root/.ssh /home/${USERNAME}
+
+read -s -n 1 -p "Press any key to continuar!"
+
 # Set $chostname to current hostname 
 chostname=$(cat /etc/hostname)
 hostname="vps-3026dd85.vps.ovh.net"
@@ -60,6 +81,7 @@ read -s -n 1 -p "Press any key to continuar 1!"
 log_info "Updating package lists and upgrading system..."
 apt-get update -y
 apt-get upgrade -y
+apt --yes -o Dpkg::Options::="--force-confnew" upgrade
 
 # Add PHP PPA BEFORE installing PHP packages
 log_info "Adding Ondrej PHP PPA..."
@@ -80,17 +102,27 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python3-certbot-nginx \
     git \
     iptables-persistent \
+    fail2ban \
     curl
 
 read -s -n 1 -p "Press any key to continuar 2!"
 
 # Configure UFW (Uncomplicated Firewall)
 log_info "Configuring UFW..."
+ufw allow 22
+ufw allow 80/tcp 
+ufw allow 443/tcp 
+ufw allow 21/tcp 
+ufw allow 8080/tcp 
+ufw allow 8443/tcp 
+ufw allow 9000/tcp 
 sudo ufw allow 'Nginx Full'
 sudo ufw allow OpenSSH
 sudo ufw --force enable
 
 log_info "Configuring iptables..."
+sudo iptables -I INPUT 1 -p tcp --dport 21 -j ACCEPT
+sudo iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
 sudo iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
 sudo iptables -I INPUT 1 -p tcp --dport 443 -j ACCEPT
 sudo iptables -I INPUT 1 -p tcp --dport 8080 -j ACCEPT
@@ -168,5 +200,7 @@ else
     log_warn "Nginx UI status check failed"
 fi
 
+echo "Script complete! Rebooting..." 
+read -s -n 1 -p "Press any key to reboot!"
+reboot
 
-echo "OK"
