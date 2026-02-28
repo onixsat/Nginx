@@ -2,7 +2,7 @@
 <h6 style="font-style:italic;">Executar os comandos para instalar o sistema.</h6>
 
 ```bash
-sudo su &&  git clone https://github.com/onixsat/Nginx.git && cd Nginx && bash install.sh
+#sudo su &&  git clone https://github.com/onixsat/Nginx.git && cd Nginx && bash install.sh
 
 sudo su
 git clone https://github.com/onixsat/Nginx.git
