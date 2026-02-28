@@ -18,19 +18,19 @@ server {
         proxy_intercept_errors on;
         error_page 301 = @301;
 
-        proxy_pass http://vps-3026dd85.vps.ovh.net;
+        proxy_pass http://host.ospro.pt;
         proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
         proxy_redirect off;
         proxy_buffering off;
         proxy_set_header        Host            $http_host;
         #proxy_set_header Host $host;
-        proxy_set_header        Host            vps-3026dd85.vps.ovh.net;
+        proxy_set_header        Host            host.ospro.pt;
         proxy_set_header        X-Real-IP       $remote_addr;
         proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
         set $valido 0;
         if ($proxy_add_x_forwarded_for = "192.168.0.1") { set $valido 1; }
         if ($host = 51.91.248.109) { set $valido 1;	}
-        if ($host = vps-3026dd85.vps.ovh.net) {	set $valido 1; }
+        if ($host = host.ospro.pt) {	set $valido 1; }
         if ($valido = 0) { return 301 http://redir.vigaristas.pt?index.php?host=$host; }
     
         #try_files $uri $uri/ =404;
@@ -48,10 +48,8 @@ server {
         listen [::]:8080 default_server;
 	listen 8443 ssl default_server;
 	listen [::]:8443 ssl default_server;
-	ssl_certificate /etc/letsencrypt/live/vps-3026dd85.vps.ovh.net/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/vps-3026dd85.vps.ovh.net/privkey.pem;
-	include /etc/letsencrypt/options-ssl-nginx.conf;
-	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;    
+	ssl_certificate /etc/ssl/certs/ospro.pt.pem;
+	ssl_certificate_key /etc/ssl/private/ospro.pt.key;
 
 	root /var/www/stream;
 	index index.php index.html index.htm index.nginx-debian.html;
