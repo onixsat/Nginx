@@ -19,13 +19,12 @@ log_error() {
 
 # Error handler
 cleanup() {
-    local exit_code=$?
-    if [ $exit_code -ne 0 ]; then
-        log_error "Script failed with exit code $exit_code at line $LINENO"
+    local code=$?
+    if [ $code -ne 0 ]; then
+        log_error "Script failed with exit code $code at line $LINENO"
     fi
-    echo $exit_code
+    echo $code
 }
-
 trap cleanup ERR
 
 # Check if running as root or with sudo
@@ -81,7 +80,6 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python3-certbot-nginx \
     git \
     iptables-persistent \
-    php8.1-sodium \
     curl
 
 read -s -n 1 -p "Press any key to continuar 2!"
